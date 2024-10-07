@@ -39,12 +39,12 @@
 #Check the status with free -m command
 - name: Check the status with free -m command
   command: free -m
-  register: status_free -m
+  register: printstatus
 
 #print status 
 - name: check the status with free -m
   debug:
-    var: status_free -m
+    var: printstatus
 
 #Check the fstab file as well
 - name: Check the fstab file as well
