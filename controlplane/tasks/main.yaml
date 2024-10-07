@@ -1,0 +1,186 @@
+#Disable Firewall
+- name: Allow everything and enable UFW
+  community.general.ufw:
+    state: disabled
+    register: ufw_status
+
+#print UFW Status
+- name: UFW Status
+  debug:
+    var: ufw_status
+
+#Update and upgrade the system
+- name: Update And Upgrade
+  apt:
+    update_cache: yes
+
+#Enable time-sync with an NTP server
+- name: install & Enable Time-sync
+  apt:
+    name: systemd-timesyncd
+    state: present
+
+#Set NTP True
+- name: set NTP true
+  command: sudo timedatectl set-ntp true
+  register: NTP_Status
+
+#NTP Status
+- name: NTP Status
+  debug:
+    var: NTP_Status
+
+#Trun Off Swap
+- name: Trun Swap Off
+  command:
+   - sudo swapoff -a
+   - sudo sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
+#Check the status with free -m command
+- name: Check the status with free -m command
+  command: free -m
+  register: status_free -m
+
+#print status 
+- name: check the status with free -m
+  debug:
+    var: status_free -m
+
+#Check the fstab file as well
+- name: Check the fstab file as well
+  command: cat /etc/fstab | grep swap
+  register: fstab-file
+
+#print fstab output
+- name: check fstab
+  debug:
+    var: fstab-file
+
+#Configure required kernel modules 
+- name: Create a file named k8s.conf in /etc/modules-load.d
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content:
+      overlay
+      br_netfilter
+    owner: root
+    group: root
+    mode: '0644'
+
+#Load above modules to the current session
+- name: Load modules to the current session
+  command:
+    - sudo modprobe overlay
+    - sudo modprobe br_netfilter
+
+#Check the status
+- name: check the status
+  command: lsmod | grep "overlay\|br_netfilter"
+  register: check-lsmod
+
+#print the status
+- name: check lsmod
+  debug:
+    var: check-lsmod
+
+#Install necessary software tools to continue
+- name: Install necessary software tools to continue
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gpg
+  - gnupg2
+  - software-properties-common
+
+#Create Directory
+- name: Add Kubernetes repository and keys
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+#Download and add the k8s repository key
+- name: Download and add the k8s repository key
+  command: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+  sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+- name: Add Kubernetes repository in the source list
+  ansible.builtin.command: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | \
+  sudo tee /etc/apt/sources.list.d/kubernetes.list
+#Update and upgrade the system
+- name: Update And Upgrade
+  apt:
+    update_cache: yes
+
+#install kubectl kubeadm
+- name: install kubelet kubeadm kubectl
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - kubelet
+  - kubeadm
+  - kubectl
+
+#hold the updates for kubeadm
+- name: hold the updates for kubeadm
+  command: apt-mark hold kubelet kubeadm kubectl
+
+#make sure that kernel modules are loaded
+- name: make sure that kernel modules are loaded
+  command: lsmod | grep "overlay\|br_netfilter"
+
+# Step 3: Create the /etc/apt/keyrings directory
+- name: Create directory for Docker GPG key
+    file:
+      path: /etc/apt/keyrings
+      state: directory
+      mode: '0755'
+
+# Step 4: Download Docker’s official GPG key
+- name: Download Docker GPG key
+    get_url:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      dest: /etc/apt/keyrings/docker.asc
+      mode: '0644'
+
+# Step 5: Add Docker repository to apt sources
+- name: Add Docker apt repository
+    shell: |
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+        $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Step 6: Update apt package index again after adding Docker repo
+- name: Update apt package index after adding Docker repository
+    apt:
+     update_cache: yes
+
+# Step 7: Install Docker packages
+- name: Install Docker packages
+    apt:
+      name: containerd.io
+      state: present
+# Step 11: Enable and start Docker service
+- name: Enable and start Docker service
+    systemd:
+      name: containerd
+      enabled: yes
+      state: started
+
+# Step 12: Display success message for Docker installation
+    - name: Display Docker installation success message
+      debug:
+        msg: "Docker has been successfully installed and started. Please log out and log back in to apply the Docker group membership."
+#Create Directroy for Containerd
+- name: Create a directory to store containerd config file in /etc/
+  file:
+    path: /etc/containerd
+    recurse: yes
+    state: directroy
+    group: root
+    owner: root
