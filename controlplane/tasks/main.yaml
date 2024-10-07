@@ -69,19 +69,20 @@
 
 #Load above modules to the current session
 - name: Load modules to the current session
-  command:
+  command: "{{ item }}"
+  with_items:
     - sudo modprobe overlay
     - sudo modprobe br_netfilter
 
 #Check the status
 - name: check the status
   command: lsmod | grep "overlay\|br_netfilter"
-  register: check-lsmod
+  register: checklsmod
 
 #print the status
 - name: check lsmod
   debug:
-    var: check-lsmod
+    var: checklsmod
 
 #Install necessary software tools to continue
 - name: Install necessary software tools to continue
