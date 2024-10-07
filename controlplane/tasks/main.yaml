@@ -49,12 +49,12 @@
 #Check the fstab file as well
 - name: Check the fstab file as well
   command: cat /etc/fstab | grep swap
-  register: fstab-file
+  register: fstabfile
 
 #print fstab output
 - name: check fstab
   debug:
-    var: fstab-file
+    var: fstabfile
 
 #Configure required kernel modules 
 - name: Create a file named k8s.conf in /etc/modules-load.d
