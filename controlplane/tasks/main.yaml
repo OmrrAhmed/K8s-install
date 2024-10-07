@@ -32,7 +32,8 @@
 
 #Trun Off Swap
 - name: Trun Swap Off
-  command:
+  command: "{{ item }}"
+  with_items:
    - sudo swapoff -a
    - sudo sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
 #Check the status with free -m command
