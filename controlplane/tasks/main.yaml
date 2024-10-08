@@ -1,8 +1,8 @@
 #Disable Firewall
 - name: Allow everything and enable UFW
-  community.general.ufw:
+  ufw:
     state: disabled
-    register: ufw_status
+  register: ufw_status
 
 #print UFW Status
 - name: UFW Status
