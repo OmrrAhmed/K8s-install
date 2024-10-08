@@ -13,6 +13,8 @@
 - name: Update And Upgrade
   apt:
     update_cache: yes
+    state: present
+    allow_unauthenticated: true
 
 #Enable time-sync with an NTP server
 - name: install & Enable Time-sync
@@ -113,7 +115,8 @@
 - name: Update And Upgrade
   apt:
     update_cache: yes
-    deb: 
+    state: present
+    allow_unauthenticated: true
 
 #install kubectl kubeadm
 - name: install kubelet kubeadm kubectl
