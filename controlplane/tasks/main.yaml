@@ -119,12 +119,15 @@
 - name: Download and add the k8s repository key
   ansible.builtin.shell: | 
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg > /dev/null
-
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg 
 
 
 - name: Add Kubernetes repository in the source list
   ansible.builtin.shell: |
      echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+  args:
+    creates: /etc/apt/sources.list.d/kubernetes.list
 #Update and upgrade the system
 - name: Update And Upgrade
   apt:
