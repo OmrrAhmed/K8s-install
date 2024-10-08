@@ -205,10 +205,8 @@
 
 #Generate the default config toml file 
 - name: Generate the default config toml file
-  command: "{{ item }}"
-  with_items:
-    - containerd config default 
-    - tee /etc/containerd/config.toml
+  shell: |
+    containerd config default| tee /etc/containerd/config.toml
 
 #Change state from false to true in config toml file
 - name: Change state from false to true in config toml file
