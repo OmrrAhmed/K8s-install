@@ -242,8 +242,9 @@
 
 #restart container d
 - name: Restart kubelet
-  service: kubelet
-  state: started
+  service:
+    name: kubelet
+    state: started
 
 #Pull images
 - name: Pull necessary Kubernets images
