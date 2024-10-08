@@ -187,7 +187,8 @@
 
 #Generate the default config toml file 
 - name: Generate the default config toml file
-  command: 
+  command: "{{ item }}"
+  with_items:
     - containerd config default 
     - tee /etc/containerd/config.toml
 
