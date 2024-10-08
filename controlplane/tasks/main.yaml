@@ -95,7 +95,7 @@
     state: directory
     owner: root
     group: root
-    mode: '755'
+    mode: '0755'
 
 
 - name: Download Kuberentes GPG key
@@ -108,11 +108,12 @@
 
 - name: Add Kubernetes repository in the source list
   shell: |
-     echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | \sudo tee /etc/apt/sources.list.d/kubernetes.list
+     echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | \sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null
 #Update and upgrade the system
 - name: Update And Upgrade
   apt:
     update_cache: yes
+    deb: 
 
 #install kubectl kubeadm
 - name: install kubelet kubeadm kubectl
