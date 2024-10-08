@@ -214,3 +214,77 @@
 - name: install cri-tools
   apt: cri-tools
   state: present
+
+  #Create crictl yaml file
+- name: crictl.yaml file
+  ansible.builtin.copy:
+    dest: /etc/crictl.yaml
+    content: |
+      runtime-endpoint: unix:///run/containerd/containerd.sock
+      image-endpoint: unix:///run/containerd/containerd.sock
+      timeout: 2
+      debug: false # <- if you don't want to see debug info you can set this to false
+      pull-image-on-create: false
+    owner: root
+    group: root
+    mode: '0644'
+
+  #command for running images
+- name:
+  command: crictl ps
+  register: printresult
+
+ 
+#print output Nginx Status
+- name: Print Reuslts
+  debug:
+    var: printresult
+
+#restart container d
+- name: Restart kubelet
+  service: kubelet
+  state: started
+
+#Pull images
+- name: Pull necessary Kubernets images
+  command: kubeadm config images pull --cri-socket unix:///var/run/containerd/containerd.sock
+
+#show Images
+- name: show images
+  command: crictl images
+  register: images
+
+- name: Print Reuslts
+  debug:
+    var: images
+
+# Initialize the control-plane
+- name: Initialize the control-plane
+  command: sudo kubeadm init \
+          --pod-network-cidr=10.244.0.0/16 \
+          --cri-socket unix:///var/run/containerd/containerd.sock \
+          --v=5
+
+#Create config file for kube
+- name: create config file kube
+  command:  
+        mkdir -p $HOME/.kube
+        sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config          
+
+#install Network Solution
+- name: install calico
+  command: "{{ item }}"
+  with_items:
+    - curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
+    - kubectl apply -f calico.yaml
+  
+
+#Command get nodes
+- name: Get Nodes
+  command: kubectl get nodes
+  register: getNodes
+
+- name: print result
+  debug:
+    var: getNodes
