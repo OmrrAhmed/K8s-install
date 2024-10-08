@@ -180,7 +180,7 @@
   file:
     path: /etc/containerd
     recurse: yes
-    state: directroy
+    state: directory
     group: root
     owner: root
 
