@@ -187,7 +187,9 @@
 
 #Generate the default config toml file 
 - name: Generate the default config toml file
-  command: containerd config default|sudo tee /etc/containerd/config.toml
+  command: 
+    - containerd config default 
+    - tee /etc/containerd/config.toml
 
 #Change state from false to true in config toml file
 - name: Change state from false to true in config toml file
