@@ -213,8 +213,9 @@
 
 #install cri-tools
 - name: install cri-tools
-  apt: cri-tools
-  state: present
+  apt: 
+    name: cri-tools
+    state: present
 
   #Create crictl yaml file
 - name: crictl.yaml file
@@ -231,7 +232,7 @@
     mode: '0644'
 
   #command for running images
-- name:
+- name: command for running images
   command: crictl ps
   register: printresult
 
