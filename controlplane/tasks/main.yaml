@@ -288,7 +288,7 @@
     dest: /tmp/calico.yaml
 
 - name: apply calico yaml 
-  shell: kubectl apply -f /tmp/calico.yaml --validate=false
+  command: kubectl apply -f /tmp/calico.yaml 
   
 
 # Initialize the control-plane
