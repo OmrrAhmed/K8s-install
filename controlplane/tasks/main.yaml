@@ -65,15 +65,15 @@
     - sudo modprobe overlay
     - sudo modprobe br_netfilter
 
-#Check the status
-- name: check the status
-  command: lsmod | grep "overlay\|br_netfilter"
-  register: checklsmod
+# #Check the status
+# - name: check the status
+#   command: lsmod | grep "overlay\|br_netfilter"
+#   register: checklsmod
 
-#print the status
-- name: check lsmod
-  debug:
-    var: checklsmod
+# #print the status
+# - name: check lsmod
+#   debug:
+#     var: checklsmod
 
 #Install necessary software tools to continue
 - name: Install necessary software tools to continue
