@@ -119,9 +119,9 @@
     name: "{{ item }}"
     state: present
   with_items:
-  - kubelet
-  - kubeadm
-  - kubectl
+    - kubelet
+    - kubeadm
+    - kubectl
 
 #hold the updates for kubeadm
 - name: hold the updates for kubeadm
