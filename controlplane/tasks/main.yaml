@@ -285,10 +285,10 @@
 - name: install calico
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
-    dest: /home
+    dest: /tmp/calico.yaml
 
 - name: apply calico yaml 
-  shell: kubectl apply -f /home/calico.yaml
+  shell: kubectl apply -f /tmp/calico.yaml
   
 
 # Initialize the control-plane
