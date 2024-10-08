@@ -283,10 +283,12 @@
 
 #install Network Solution
 - name: install calico
-  command: "{{ item }}"
-  with_items:
-    - curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
-    - kubectl apply -f calico.yaml
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
+    dest: /home
+
+- name: apply calico yaml 
+  shell: kubectl apply -f /home/calico.yaml
   
 
 # Initialize the control-plane
