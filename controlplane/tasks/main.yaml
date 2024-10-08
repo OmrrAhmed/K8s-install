@@ -22,7 +22,7 @@
 
 #Set NTP True
 - name: set NTP true
-  command: sudo timedatectl set-ntp true
+  command: timedatectl set-ntp true
   register: NTP_Status
 
 #NTP Status
