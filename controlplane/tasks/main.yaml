@@ -165,16 +165,16 @@
     name: containerd.io
     state: present
 # Step 11: Enable and start Docker service
-- name: Enable and start Docker service
+- name: Enable and start containerd service
   systemd:
     name: containerd
     enabled: yes
     state: started
 
 # Step 12: Display success message for Docker installation
-- name: Display Docker installation success message
+- name: Display containerd installation success message
   debug:
-    msg: "Docker has been successfully installed and started. Please log out and log back in to apply the Docker group membership."
+    msg: "containerd has been successfully installed and started. Please log out and log back in to apply the containerd group membership."
 #Create Directroy for Containerd
 - name: Create a directory to store containerd config file in /etc/
   file:
