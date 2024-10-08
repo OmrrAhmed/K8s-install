@@ -280,6 +280,15 @@
   debug:
     var: images
 
+
+#install Network Solution
+- name: install calico
+  command: "{{ item }}"
+  with_items:
+    - curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
+    - kubectl apply -f calico.yaml
+  
+
 # Initialize the control-plane
 - name: Initialize the control-plane
   shell: | 
@@ -295,13 +304,7 @@
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config          
 
-#install Network Solution
-- name: install calico
-  command: "{{ item }}"
-  with_items:
-    - curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml -O
-    - kubectl apply -f calico.yaml
-  
+
 
 #Command get nodes
 - name: Get Nodes
