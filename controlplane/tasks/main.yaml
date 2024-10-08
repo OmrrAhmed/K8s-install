@@ -102,13 +102,13 @@
 
 #Download and add the k8s repository key
 - name: Download and add the k8s repository key
-  shell: | 
+  command: | 
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 
 
 - name: Add Kubernetes repository in the source list
-  shell: |
+  command: |
      echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | \sudo tee /etc/apt/sources.list.d/kubernetes.list
 #Update and upgrade the system
 - name: Update And Upgrade
