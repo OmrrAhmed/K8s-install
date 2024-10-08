@@ -127,9 +127,9 @@
 - name: hold the updates for kubeadm
   command: apt-mark hold kubelet kubeadm kubectl
 
-#make sure that kernel modules are loaded
-- name: make sure that kernel modules are loaded
-  command: lsmod | grep "overlay\|br_netfilter"
+# #make sure that kernel modules are loaded
+# - name: make sure that kernel modules are loaded
+#   command: lsmod | grep "overlay\|br_netfilter"
 
 # Step 3: Create the /etc/apt/keyrings directory
 - name: Create directory for Docker GPG key
