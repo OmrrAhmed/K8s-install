@@ -198,8 +198,9 @@
 
 #restart container d
 - name: Restart Containerd
-  service: containerd
-  state: restarted
+  service: 
+    name: containerd
+    state: restarted
 
 - name: Run Command containerd Status
   command: "systemctl status containerd"
