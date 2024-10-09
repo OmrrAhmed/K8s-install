@@ -320,14 +320,5 @@
     var: getNodes
 
 
-- name: Create token and get join command
-  command: kubeadm token create --print-join-command
-  register: join_command
-
-- name: join command
-  debug:
-    var: join_command.stdout
-
-
 
 
