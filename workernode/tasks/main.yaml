@@ -271,6 +271,7 @@
 
 
 - name: Join node to the Kubernetes cluster
-  shell: /bin/bash
-  when: join_command.stdout
+  shell: "{{ item }}"
+  with_items:
+    - "{{ join_command.stdout_lines }}"
 
