@@ -271,7 +271,6 @@
 
 
 - name: Join node to the Kubernetes cluster
-  shell: "{{ hostvars['controlplane']['join_command'].stdout }}"
-  args:
-    executable: /bin/bash
+  shell: /bin/bash
+  when: join_command.stdout
 
