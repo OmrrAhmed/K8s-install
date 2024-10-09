@@ -270,5 +270,8 @@
     state: started
 
 
-
+- name: Join node to the Kubernetes cluster
+  shell: "{{ hostvars['controlplane']['join_command'].stdout }}"
+  args:
+    executable: /bin/bash
 
