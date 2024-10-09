@@ -264,8 +264,11 @@
 #restart container d
 - name: Restart kubelet
   service:
-    name: kubelet
+    name: "{{ item }}"
     state: started
+  with_items:
+    - kubelet
+    - kubectl
 
 #Pull images
 - name: Pull necessary Kubernets images
@@ -286,6 +289,16 @@
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml
     dest: /tmp/calico.yaml
+
+#check for kubectl status
+- name: check for kubectl status
+  command: systemctl status kubectl
+  register: kubectlstatus
+
+- name: print result
+  debug:
+    var: kubectlstatus
+
 
 - name: apply calico yaml 
   command: kubectl apply -f /tmp/calico.yaml 
