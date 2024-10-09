@@ -20,20 +20,21 @@
 - name: Get kubeadm join command
   hosts: controlplane
   tasks:
-- name: Create token and get join command
-  command: kubeadm token create --print-join-command
-  register: join_command
+    - name: Create token and get join command
+      command: kubeadm token create --print-join-command
+      register: join_command
 
-- name:
-  debug:
-    var: join_command.stdout
+    - name:
+      debug:
+        var: join_command.stdout
+
 
 - name: Join Kubernetes Worker Nodes
   hosts: workernode
   become: yes
   tasks:
 
-- name: Join node to the Kubernetes cluster
-  shell: "{{ hostvars['master']['join_command'].stdout }}"
-  args:
-    executable: /bin/bash
+    - name: Join node to the Kubernetes cluster
+      shell: "{{ hostvars['master']['join_command'].stdout }}"
+      args:
+        executable: /bin/bash
