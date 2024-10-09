@@ -290,15 +290,6 @@
     url: https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/calico.yaml
     dest: /tmp/calico.yaml
 
-#check for kubectl status
-- name: check for kubectl status
-  command: systemctl status kubectl
-  register: kubectlstatus
-
-- name: print result
-  debug:
-    var: kubectlstatus
-
 
 - name: apply calico yaml 
   command: kubectl apply -f /tmp/calico.yaml 
