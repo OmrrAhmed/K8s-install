@@ -326,7 +326,7 @@
 
 - name: join command
   debug:
-    var: "{{ join_command.stdout }}"
+    var: "{{ join_command.stdout_lines }}"
 
 
 
