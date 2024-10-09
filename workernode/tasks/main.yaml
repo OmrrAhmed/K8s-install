@@ -273,5 +273,5 @@
 - name: Join node to the Kubernetes cluster
   shell: "{{ item }}"
   with_items:
-    - "{{ hostvars['controlplane']['join_command.stdout_lines'] }}"
+    - "{{ join_command.stdout_lines }}"
 
