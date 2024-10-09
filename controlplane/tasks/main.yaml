@@ -318,3 +318,4 @@
 - name: print result
   debug:
     var: getNodes
+
