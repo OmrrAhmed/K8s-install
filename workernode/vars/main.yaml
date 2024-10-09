@@ -1,2 +1,1 @@
-[vars_host_group_vars]
 join_command: join_command.stdout
