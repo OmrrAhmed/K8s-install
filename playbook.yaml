@@ -7,7 +7,7 @@
   roles:
     - controlplane
 
----
+
 - hosts: workernode
   remote_user: ubuntu
   become: yes
