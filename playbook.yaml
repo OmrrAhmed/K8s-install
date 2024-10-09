@@ -28,7 +28,6 @@
       debug:
         var: join_command.stdout
 
-
 - name: Join Kubernetes Worker Nodes
   hosts: workernode
   become: yes
