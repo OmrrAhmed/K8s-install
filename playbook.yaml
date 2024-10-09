@@ -34,6 +34,6 @@
   tasks:
 
     - name: Join node to the Kubernetes cluster
-      shell: "{{ hostvars['master']['join_command'].stdout }}"
+      shell: "{{ hostvars['controlplane']['join_command'].stdout }}"
       args:
         executable: /bin/bash
