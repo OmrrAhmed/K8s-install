@@ -1,1 +1,1 @@
-join_command: join_command.stdout
+join_command: "{{ join_command.stdout }}"
