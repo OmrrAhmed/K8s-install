@@ -270,6 +270,4 @@
     state: started
 
 
-- name: Join node to the Kubernetes cluster
-  command: "{{ join_command }}"
 
