@@ -33,10 +33,6 @@
         recurse: true
         path: /etc/ansible/facts.d
 
-    - name: Install custom ipmi fact
-      ansible.builtin.copy:
-        src: ipmi.fact
-        dest: /etc/ansible/facts.d
 
     - name: Re-read facts after adding custom fact
       ansible.builtin.setup:
