@@ -35,6 +35,7 @@
 - name: Join Kubernetes Worker Nodes
   hosts: workernode
   become: yes
+  gather_facts: false
   tasks:
     - name: Use the join command to join the cluster
       ansible.builtin.command: "{{ hostvars['controlplane']['ansible_facts']['kubeadm_join_command'] }}"
