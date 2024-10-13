@@ -37,7 +37,7 @@
   become: yes
   tasks:
     - name: Use the join command to join the cluster
-      ansible.builtin.command: "{{ ansible_facts['controlplane']['kubeadm_join_command'] }}"
+      ansible.builtin.command: "{{ hostvars['controlplane']['ansible_facts']['kubeadm_join_command'] }}"
       args:
         executable: /bin/bash
 
