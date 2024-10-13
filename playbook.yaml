@@ -20,17 +20,20 @@
 - name: Get kubeadm join command from master
   hosts: controlplane
   become: true
+  gather_facts: false
   tasks:
 
     - name: Create token and get join command
       command: kubeadm token create --print-join-command
       register: join_command
+    
 
     - name: Save join command in a fact
       set_fact:
         kubeadm_join_command: "{{ join_command.stdout }}"
       # Save this fact globally, so it is accessible to all hosts
-      delegate_facts: true
+        delegate_facts: true
+        cacheable: yes
 
 - name: Join Kubernetes Worker Nodes
   hosts: workernode
@@ -38,7 +41,7 @@
   gather_facts: false
   tasks:
     - name: Use the join command to join the cluster
-      ansible.builtin.command: "{{ hostvars['controlplane']['ansible_facts']['kubeadm_join_command'] }}"
+      ansible.builtin.shell: "{{ hostvars['controlplane']['ansible_facts']['kubeadm_join_command'] }}"
       args:
         executable: /bin/bash
 
