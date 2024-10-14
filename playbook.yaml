@@ -39,6 +39,7 @@
       ansible.builtin.shell: "{{ kubeadm_join_command }}"
       args:
         executable: /bin/bash
-      delegate_to: workernode
+      delegate_to: "{{ item }}}"
+      loop: "{{ group['workernode']}}"
 
 
