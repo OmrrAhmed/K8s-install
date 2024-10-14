@@ -17,30 +17,12 @@
     - workernode
 
 
-- name: Get kubeadm join command from master
-  hosts: controlplane
-  become: true
-  gather_facts: false
-  tasks:
-
-    - name: Create token and get join command
-      command: kubeadm token create --print-join-command
-      register: join_command
-    
-    - name: Save join command in a fact
-      set_fact:
-        kubeadm_join_command: "{{ join_command.stdout }}"
-      # Save this fact globally, so it is accessible to all hosts
-        delegate_facts: true
-        cacheable: yes
+- hosts: controlplane
+  remote_user: ubuntu
+  become: yes
 
 
-    - name: Use the join command to join the cluster
-      ansible.builtin.shell: "{{ kubeadm_join_command }}"
-      args:
-        executable: /bin/bash
-      delegate_to: "{{ item }}"
-      with_items:
-        - 13.51.108.87
+  roles:
+    - joinworkernode
 
 
