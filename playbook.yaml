@@ -34,13 +34,11 @@
         delegate_facts: true
         cacheable: yes
 
-- name: Join Kubernetes Worker Nodes
-  hosts: workernode
-  become: yes
-  gather_facts: false
-  tasks:
+
     - name: Use the join command to join the cluster
       ansible.builtin.shell: "{{ kubeadm_join_command }}"
       args:
         executable: /bin/bash
+      delegate_to: workernode
+
 
