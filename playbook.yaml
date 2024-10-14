@@ -27,17 +27,6 @@
       command: kubeadm token create --print-join-command
       register: join_command
     
-    - name: Create directory for ansible custom facts
-      ansible.builtin.file:
-        state: directory
-        recurse: true
-        path: /etc/ansible/facts.d
-
-
-    - name: Re-read facts after adding custom fact
-      ansible.builtin.setup:
-        filter: ansible_local
-
     - name: Save join command in a fact
       set_fact:
         kubeadm_join_command: "{{ join_command.stdout }}"
@@ -51,7 +40,7 @@
   gather_facts: false
   tasks:
     - name: Use the join command to join the cluster
-      ansible.builtin.shell: "{{ hostvars['controlplane']['ansible_facts']['kubeadm_join_command'] }}"
+      ansible.builtin.shell: "{{ kubeadm_join_command }}"
       args:
         executable: /bin/bash
 
