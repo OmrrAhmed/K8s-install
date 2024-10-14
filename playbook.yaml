@@ -39,7 +39,7 @@
       ansible.builtin.shell: "{{ kubeadm_join_command }}"
       args:
         executable: /bin/bash
-      delegate_to: "{{ item }}}"
+      delegate_to: "{{ item }}"
       with_items:
         - 13.51.108.87
 
