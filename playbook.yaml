@@ -26,3 +26,10 @@
     - joinworkernode
 
 
+- hosts: controlplane
+  remote_user: ubuntu
+  become: yes
+
+
+  roles:
+    - install ingress-nginx
