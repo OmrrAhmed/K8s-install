@@ -320,5 +320,32 @@
     var: getNodes
 
 
+#install helm
+- name: Download helm
+  ansible.builtin.shell: | 
+    curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+  args:
+    creates: /usr/share/keyrings/helm.gpg
 
+# Step 5: Add helm repository to apt sources
+- name: Add helm repository
+  shell: |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 
+# Step 6: Update apt package index again after adding Docker repo
+- name: Update apt package index after adding helm repository
+  apt:
+    update_cache: yes
+
+- name: install helm
+  apt: 
+    name: helm
+    state: present
+
+- name: Run Commands for installing ingress-controller
+  command: "{{ item }}"
+  with_items:
+    - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    - helm repo update
+    - kubectl create ns ingress-nginx
+    - helm install nginx-ingress ingress-nginx/ingress-nginx --namespace ingress-nginx --set controller.service.type=NodePort --set controller.service.nodePorts.http=30080 --set controller.service.nodePorts.https=30443 --set controller.admissionWebhooks.enabled=true --set controller.admissionWebhooks.patch.enabled=true
