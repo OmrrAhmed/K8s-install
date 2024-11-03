@@ -16,4 +16,4 @@
     executable: /bin/bash
   delegate_to: "{{ item }}"
   with_items:
-    - <ip_address>
+    - 16.16.209.91
