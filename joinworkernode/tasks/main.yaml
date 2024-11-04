@@ -16,4 +16,4 @@
     executable: /bin/bash
   delegate_to: "{{ item }}"
   with_items:
-    - 13.49.46.174
+    - 13.53.37.61
